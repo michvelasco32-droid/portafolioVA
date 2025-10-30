@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotación de Imágenes con OpenCV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section h3 {
+            color: #2d3748;
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .code-line {
+            display: block;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .keyword {
+            color: #c586c0;
+        }
+
+        .function {
+            color: #dcdcaa;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .key-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .key-card .key {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .key-card .action {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .info-box {
+            background: #e6f2ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .info-box strong {
+            color: #667eea;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin: 1rem 0;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #667eea;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                font-size: 0.85rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔄 Rotación de Imágenes con OpenCV</h1>
+        <p>Control interactivo de rotación con teclado</p>
+    </header>
+
+    <div class="container">
+        <!-- Descripción General -->
+        <div class="section">
+            <h2>📋 Descripción del Programa</h2>
+            <p>Este programa permite <strong>rotar imágenes de forma interactiva</strong> usando las teclas del teclado. Utiliza la biblioteca OpenCV para manipular y mostrar imágenes, permitiendo rotaciones de 90° y 180° en tiempo real.</p>
+            
+            <div class="info-box">
+                <strong>💡 Objetivo:</strong> Demostrar cómo manipular imágenes mediante controles de teclado, aplicando transformaciones geométricas básicas.
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="section">
+            <h2>🎮 Controles del Teclado</h2>
+            <div class="key-controls">
+                <div class="key-card">
+                    <span class="key">D</span>
+                    <span class="action">Rotar 90° a la derecha (sentido horario)</span>
+                </div>
+                <div class="key-card">
+                    <span class="key">A</span>
+                    <span class="action">Rotar 90° a la izquierda (sentido antihorario)</span>
+                </div>
+                <div class="key-card">
+                    <span class="key">W</span>
+                    <span class="action">Rotar 180° (dar vuelta completa)</span>
+                </div>
+                <div class="key-card">
+                    <span class="key">S</span>
+                    <span class="action">Salir del programa</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Código Completo -->
+        <div class="section">
+            <h2>💻 Código Completo</h2>
+            <div class="code-block">
+<span class="comment">#importar libreria opencv</span>
+<span class="keyword">import</span> cv2
+
+<span class="comment">#guardamos la imagen en una var</span>
+imagen=cv2.<span class="function">imread</span>(<span class="string">"myhero.jfif"</span>)
+imgoriginal=imagen.<span class="function">copy</span>()<span class="comment">#creo una copia de la imagen</span>
+
+<span class="keyword">while</span> <span class="keyword">True</span>:<span class="comment">#ciclo infinito</span>
+    cv2.<span class="function">imshow</span>(<span class="string">"imagen"</span>,imagen)
+    tecla = cv2.<span class="function">waitKey</span>(<span class="number">0</span>)<span class="comment">#espera infinita hasta la presion de una tecla</span>
+
+    <span class="keyword">if</span> tecla==<span class="function">ord</span>(<span class="string">"d"</span>): <span class="comment"># D gira a la derecha</span>
+        imagen=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_90_CLOCKWISE)
+        <span class="function">print</span>(<span class="string">"imagen rotando a la derecha"</span>)
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">"a"</span>):<span class="comment"># A gira a la izquierda</span>
+        imagen=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_90_COUNTERCLOCKWISE)
+        <span class="function">print</span>(<span class="string">"se presiono la tecla"</span>,tecla)
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">"w"</span>):<span class="comment">#gira 180 grados</span>
+        imagen=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_180)
+        <span class="function">print</span>(<span class="string">"se presiono la tecla"</span>,tecla)
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">"s"</span>):<span class="comment"># tecla para salir</span>
+        <span class="function">print</span>(<span class="string">"se presiono la tecla"</span>,tecla)
+        <span class="keyword">break</span>
+            </div>
+        </div>
+
+        <!-- Explicación Detallada -->
+        <div class="section">
+            <h2>📖 Explicación Línea por Línea</h2>
+
+            <h3>1. Importar la Biblioteca</h3>
+            <div class="code-block">
+<span class="keyword">import</span> cv2
+            </div>
+            <p>Importa OpenCV (cv2), la biblioteca principal para visión artificial y procesamiento de imágenes en Python.</p>
+
+            <h3>2. Cargar la Imagen</h3>
+            <div class="code-block">
+imagen=cv2.<span class="function">imread</span>(<span class="string">"myhero.jfif"</span>)
+imgoriginal=imagen.<span class="function">copy</span>()
+            </div>
+            <p><span class="highlight">cv2.imread()</span> carga la imagen desde el archivo. Se crea una copia con <span class="highlight">.copy()</span> para preservar la imagen original en caso de necesitarla.</p>
+
+            <h3>3. Ciclo Infinito</h3>
+            <div class="code-block">
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    cv2.<span class="function">imshow</span>(<span class="string">"imagen"</span>,imagen)
+    tecla = cv2.<span class="function">waitKey</span>(<span class="number">0</span>)
+            </div>
+            <p>El programa entra en un bucle infinito que:</p>
+            <ul class="step-list">
+                <li><span class="highlight">cv2.imshow()</span> muestra la imagen en una ventana llamada "imagen"</li>
+                <li><span class="highlight">cv2.waitKey(0)</span> espera infinitamente hasta que el usuario presione una tecla</li>
+            </ul>
+
+            <h3>4. Condiciones de Rotación</h3>
+            
+            <p><strong>Tecla D - Rotar a la Derecha:</strong></p>
+            <div class="code-block">
+<span class="keyword">if</span> tecla==<span class="function">ord</span>(<span class="string">"d"</span>):
+    imagen=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_90_CLOCKWISE)
+            </div>
+            <p>Si se presiona 'D', rota la imagen 90° en sentido horario (derecha).</p>
+
+            <p><strong>Tecla A - Rotar a la Izquierda:</strong></p>
+            <div class="code-block">
+<span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">"a"</span>):
+    imagen=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_90_COUNTERCLOCKWISE)
+            </div>
+            <p>Si se presiona 'A', rota la imagen 90° en sentido antihorario (izquierda).</p>
+
+            <p><strong>Tecla W - Rotar 180°:</strong></p>
+            <div class="code-block">
+<span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">"w"</span>):
+    imagen=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_180)
+            </div>
+            <p>Si se presiona 'W', rota la imagen 180° (la voltea completamente).</p>
+
+            <p><strong>Tecla S - Salir:</strong></p>
+            <div class="code-block">
+<span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">"s"</span>):
+    <span class="keyword">break</span>
+            </div>
+            <p>Si se presiona 'S', el comando <span class="highlight">break</span> termina el ciclo y finaliza el programa.</p>
+        </div>
+
+        <!-- Funciones Clave -->
+        <div class="section">
+            <h2>🔑 Funciones Clave de OpenCV</h2>
+            
+            <h3>cv2.imread()</h3>
+            <p>Carga una imagen desde un archivo en el disco.</p>
+            <div class="info-box">
+                <strong>Sintaxis:</strong> cv2.imread(ruta_archivo)
+            </div>
+
+            <h3>cv2.imshow()</h3>
+            <p>Muestra una imagen en una ventana.</p>
+            <div class="info-box">
+                <strong>Sintaxis:</strong> cv2.imshow(nombre_ventana, imagen)
+            </div>
+
+            <h3>cv2.waitKey()</h3>
+            <p>Espera la presión de una tecla. Si el parámetro es 0, espera indefinidamente.</p>
+            <div class="info-box">
+                <strong>Sintaxis:</strong> cv2.waitKey(milisegundos)
+            </div>
+
+            <h3>cv2.rotate()</h3>
+            <p>Rota una imagen según el ángulo especificado.</p>
+            <div class="info-box">
+                <strong>Opciones de rotación:</strong><br>
+                • <strong>ROTATE_90_CLOCKWISE:</strong> 90° sentido horario<br>
+                • <strong>ROTATE_90_COUNTERCLOCKWISE:</strong> 90° sentido antihorario<br>
+                • <strong>ROTATE_180:</strong> 180° (voltear)
+            </div>
+
+            <h3>ord()</h3>
+            <p>Función de Python que convierte un carácter en su código ASCII numérico, necesario para comparar teclas presionadas.</p>
+        </div>
+
+        <!-- Flujo del Programa -->
+        <div class="section">
+            <h2>🔄 Flujo del Programa</h2>
+            <ol class="step-list">
+                <li>Se carga la imagen "myhero.jfif" en memoria</li>
+                <li>Se crea una copia de seguridad de la imagen original</li>
+                <li>Entra en un ciclo infinito que muestra la imagen</li>
+                <li>Espera a que el usuario presione una tecla</li>
+                <li>Según la tecla presionada, aplica la rotación correspondiente</li>
+                <li>Vuelve al paso 3 para mostrar la imagen rotada</li>
+                <li>Si se presiona 'S', sale del ciclo y termina el programa</li>
+            </ol>
+        </div>
+
+        <!-- Requisitos -->
+        <div class="section">
+            <h2>📦 Requisitos</h2>
+            <p>Para ejecutar este programa necesitas:</p>
+            <ul class="step-list">
+                <li>Python 3.x instalado</li>
+                <li>Biblioteca OpenCV instalada: <span class="highlight">pip install opencv-python</span></li>
+                <li>Un archivo de imagen llamado "myhero.jfif" en el mismo directorio del script</li>
+            </ul>
+        </div>
+
+        <!-- Aplicaciones -->
+        <div class="section">
+            <h2>🎯 Aplicaciones Prácticas</h2>
+            <ul class="step-list">
+                <li><strong>Editor de imágenes básico:</strong> Permite a los usuarios rotar fotos antes de guardarlas</li>
+                <li><strong>Corrección de orientación:</strong> Útil para corregir fotos tomadas en orientación incorrecta</li>
+                <li><strong>Visualización de datos:</strong> Permite ver imágenes médicas o técnicas desde diferentes ángulos</li>
+                <li><strong>Aprendizaje de visión artificial:</strong> Ejemplo básico para entender transformaciones geométricas</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

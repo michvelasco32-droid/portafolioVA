@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrir Imagen con Python</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .topic-number {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Sección de Código */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Bloque de Código */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            display: block;
+            white-space: pre;
+        }
+
+        /* Sintaxis highlighting */
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .function { color: #dcdcaa; }
+        .variable { color: #9cdcfe; }
+
+        /* Glosario */
+        .glossary {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .glossary-item {
+            border-left: 4px solid #667eea;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(8px);
+            background: #e9ecef;
+        }
+
+        .function-name {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .function-description {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 2rem 1.5rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="back-link">← Volver al inicio</a>
+        <h1>Abrir Imagen con Python</h1>
+        <p class="topic-number">Tema 01</p>
+    </header>
+
+    <!-- Contenido Principal -->
+    <div class="container">
+        <!-- Sección de Código -->
+        <section class="section">
+            <h2 class="section-title">
+                <span class="section-icon">💻</span>
+                Código del Ejemplo
+            </h2>
+            <div class="code-block">
+<code><span class="comment"># Importar librerías necesarias</span>
+<span class="keyword">import</span> cv2
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># Función para abrir y mostrar una imagen</span>
+<span class="keyword">def</span> <span class="function">abrir_imagen</span>(ruta_imagen):
+    <span class="comment"># Cargar la imagen usando OpenCV</span>
+    imagen = cv2.<span class="function">imread</span>(ruta_imagen)
+    
+    <span class="comment"># Convertir de BGR a RGB para mostrar correctamente</span>
+    imagen_rgb = cv2.<span class="function">cvtColor</span>(imagen, cv2.COLOR_BGR2RGB)
+    
+    <span class="comment"># Mostrar la imagen</span>
+    plt.<span class="function">figure</span>(figsize=(<span class="string">10</span>, <span class="string">8</span>))
+    plt.<span class="function">imshow</span>(imagen_rgb)
+    plt.<span class="function">axis</span>(<span class="string">'off'</span>)
+    plt.<span class="function">title</span>(<span class="string">'Imagen Cargada'</span>)
+    plt.<span class="function">show</span>()
+    
+    <span class="keyword">return</span> imagen
+
+<span class="comment"># Ejecutar la función</span>
+ruta = <span class="string">'imagen.jpg'</span>
+img = <span class="function">abrir_imagen</span>(ruta)</code>
+            </div>
+        </section>
+
+        <!-- Glosario de Funciones -->
+        <section class="section">
+            <h2 class="section-title">
+                <span class="section-icon">📚</span>
+                Glosario de Funciones
+            </h2>
+            <div class="glossary">
+                <div class="glossary-item">
+                    <div class="function-name">cv2.imread()</div>
+                    <div class="function-description">
+                        Lee una imagen desde un archivo y la carga en memoria como un array de NumPy. Retorna la imagen en formato BGR (Blue, Green, Red).
+                    </div>
+                </div>
+
+                <div class="glossary-item">
+                    <div class="function-name">cv2.cvtColor()</div>
+                    <div class="function-description">
+                        Convierte una imagen de un espacio de color a otro. En este caso, convierte de BGR a RGB para una visualización correcta con matplotlib.
+                    </div>
+                </div>
+
+                <div class="glossary-item">
+                    <div class="function-name">plt.figure()</div>
+                    <div class="function-description">
+                        Crea una nueva figura de matplotlib con el tamaño especificado en pulgadas. Sirve como contenedor para los elementos gráficos.
+                    </div>
+                </div>
+
+                <div class="glossary-item">
+                    <div class="function-name">plt.imshow()</div>
+                    <div class="function-description">
+                        Muestra una imagen en la figura actual. Acepta arrays de NumPy y los renderiza como imagen.
+                    </div>
+                </div>
+
+                <div class="glossary-item">
+                    <div class="function-name">plt.axis()</div>
+                    <div class="function-description">
+                        Controla la visibilidad y propiedades de los ejes. Con el parámetro 'off' oculta los ejes para mostrar solo la imagen.
+                    </div>
+                </div>
+
+                <div class="glossary-item">
+                    <div class="function-name">plt.title()</div>
+                    <div class="function-description">
+                        Añade un título a la figura actual. Permite personalizar el texto que aparece sobre la imagen.
+                    </div>
+                </div>
+
+                <div class="glossary-item">
+                    <div class="function-name">plt.show()</div>
+                    <div class="function-description">
+                        Muestra todas las figuras creadas. Es necesario llamar esta función para que las imágenes se visualicen en pantalla.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

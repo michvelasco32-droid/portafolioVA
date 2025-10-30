@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ampliar Imagen con Python - Explicación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #2d3748;
+            background: #f7fafc;
+        }
+
+        /* Hero con imagen */
+        .hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            z-index: 1;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.95;
+        }
+
+        /* Contenido principal */
+        .container {
+            max-width: 1100px;
+            margin: -3rem auto 0;
+            padding: 0 2rem 4rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #764ba2;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        /* Código */
+        .code-container {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-container pre {
+            margin: 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .code-line {
+            display: block;
+        }
+
+        .keyword { color: #c792ea; }
+        .function { color: #82aaff; }
+        .string { color: #c3e88d; }
+        .comment { color: #676e95; font-style: italic; }
+        .number { color: #f78c6c; }
+
+        /* Explicación paso a paso */
+        .steps {
+            margin: 2rem 0;
+        }
+
+        .step {
+            background: linear-gradient(135deg, #f8f9ff 0%, #faf5ff 100%);
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(8px);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .step-title {
+            color: #764ba2;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content {
+            color: #4a5568;
+            margin-left: 3rem;
+        }
+
+        /* Controles */
+        .controls-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .controls-box h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .control-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .control-key {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-width: 60px;
+            text-align: center;
+            margin-right: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                height: 50vh;
+                min-height: 300px;
+            }
+
+            .content-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem 2rem;
+            }
+
+            .step-content {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero con imagen de fondo -->
+    <section class="hero">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="Paisaje" class="hero-bg">
+        <div class="hero-content">
+            <h1>Ampliar Imagen Interactiva</h1>
+            <p>Aprende a crear un visualizador de imágenes con zoom usando OpenCV</p>
+        </div>
+    </section>
+
+    <!-- Contenido -->
+    <div class="container">
+        <div class="content-card">
+            <h2 class="section-title">📸 ¿Qué hace este código?</h2>
+            <p class="description">
+                Este programa crea un visualizador interactivo de imágenes que permite hacer zoom in y zoom out en tiempo real. Utilizando la biblioteca OpenCV de Python, puedes ampliar o reducir una imagen mediante comandos de teclado, perfecto para inspeccionar detalles o tener una vista general de la imagen.
+            </p>
+
+            <!-- Código completo -->
+            <div class="code-container">
+                <pre><code><span class="keyword">def</span> <span class="function">ampliar</span>():
+    <span class="keyword">import</span> cv2
+    <span class="comment"># Cargo la imagen en una variable</span>
+    img_original = cv2.<span class="function">imread</span>(<span class="string">"myhero.jfif"</span>)
+    <span class="comment"># Creando variable para el valor del zoom original</span>
+    zoom = <span class="number">1.0</span>
+
+    <span class="keyword">while</span> <span class="keyword">True</span>:
+        img = cv2.<span class="function">resize</span>(img_original, <span class="keyword">None</span>, fx=zoom, fy=zoom)
+        cv2.<span class="function">imshow</span>(<span class="string">"imagen nueva"</span>, img)
+        tecla = cv2.<span class="function">waitKey</span>(<span class="number">0</span>)
+        
+        <span class="keyword">if</span> tecla == <span class="function">ord</span>(<span class="string">'+'</span>):
+            zoom = zoom * <span class="number">1.2</span>
+        <span class="keyword">elif</span> tecla == <span class="function">ord</span>(<span class="string">"-"</span>):
+            zoom = zoom - <span class="number">0.2</span>
+        <span class="keyword">elif</span> tecla == <span class="function">ord</span>(<span class="string">'o'</span>):
+            zoom = <span class="number">1.0</span>
+        <span class="keyword">elif</span> tecla == <span class="function">ord</span>(<span class="string">'x'</span>):
+            <span class="keyword">break</span></code></pre>
+            </div>
+
+            <!-- Explicación paso a paso -->
+            <h2 class="section-title">🔍 Explicación Paso a Paso</h2>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div>
+                        <div class="step-title">Importar OpenCV</div>
+                        <div class="step-content">
+                            Se importa la biblioteca <strong>cv2</strong> (OpenCV) que proporciona todas las herramientas necesarias para el procesamiento de imágenes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div>
+                        <div class="step-title">Cargar la imagen</div>
+                        <div class="step-content">
+                            La función <strong>cv2.imread()</strong> carga la imagen "myhero.jfif" y la almacena en la variable <strong>img_original</strong>. Esta será nuestra imagen base que no se modificará.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div>
+                        <div class="step-title">Inicializar el zoom</div>
+                        <div class="step-content">
+                            La variable <strong>zoom</strong> comienza en 1.0, lo que representa el tamaño original de la imagen (100%). Este valor se modificará según las acciones del usuario.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div>
+                        <div class="step-title">Bucle infinito</div>
+                        <div class="step-content">
+                            El programa entra en un bucle <strong>while True</strong> que se ejecutará continuamente hasta que el usuario decida salir presionando la tecla 'x'.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <div>
+                        <div class="step-title">Redimensionar la imagen</div>
+                        <div class="step-content">
+                            <strong>cv2.resize()</strong> crea una nueva versión de la imagen aplicando el factor de zoom actual. Los parámetros <strong>fx</strong> y <strong>fy</strong> controlan el factor de escala en los ejes X e Y respectivamente.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">6</span>
+                    <div>
+                        <div class="step-title">Mostrar la imagen</div>
+                        <div class="step-content">
+                            <strong>cv2.imshow()</strong> muestra la imagen redimensionada en una ventana titulada "imagen nueva".
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">7</span>
+                    <div>
+                        <div class="step-title">Esperar entrada del usuario</div>
+                        <div class="step-content">
+                            <strong>cv2.waitKey(0)</strong> pausa el programa y espera a que el usuario presione una tecla. El valor 0 indica que esperará indefinidamente.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">8</span>
+                    <div>
+                        <div class="step-title">Procesar comandos</div>
+                        <div class="step-content">
+                            El programa evalúa qué tecla fue presionada y ajusta el zoom en consecuencia. La función <strong>ord()</strong> convierte el carácter a su código ASCII para compararlo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles -->
+            <div class="controls-box">
+                <h3>⌨️ Controles del Programa</h3>
+                <div class="control-item">
+                    <div class="control-key">+</div>
+                    <div>Aumentar zoom en un 20% (multiplica por 1.2)</div>
+                </div>
+                <div class="control-item">
+                    <div class="control-key">-</div>
+                    <div>Reducir zoom en 0.2 unidades</div>
+                </div>
+                <div class="control-item">
+                    <div class="control-key">O</div>
+                    <div>Restaurar tamaño original (zoom = 1.0)</div>
+                </div>
+                <div class="control-item">
+                    <div class="control-key">X</div>
+                    <div>Salir del programa</div>
+                </div>
+            </div>
+
+            <!-- Conceptos clave -->
+            <h2 class="section-title">💡 Conceptos Clave</h2>
+            <div class="steps">
+                <div class="step">
+                    <div>
+                        <div class="step-title">cv2.imread()</div>
+                        <div class="step-content">
+                            Lee una imagen desde el disco y la convierte en una matriz NumPy que puede ser manipulada.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div>
+                        <div class="step-title">cv2.resize()</div>
+                        <div class="step-content">
+                            Cambia el tamaño de una imagen. Puede usar dimensiones específicas o factores de escala (fx, fy).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div>
+                        <div class="step-title">cv2.imshow()</div>
+                        <div class="step-content">
+                            Muestra una imagen en una ventana. Requiere waitKey() para funcionar correctamente.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div>
+                        <div class="step-title">cv2.waitKey()</div>
+                        <div class="step-content">
+                            Espera la entrada del teclado. El parámetro indica los milisegundos a esperar (0 = infinito).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

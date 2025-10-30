@@ -1,0 +1,30 @@
+import cv2
+
+# Cargar la imagen
+img = cv2.imread('equipo.jpg')
+
+# Redimensionar la imagen a un tamaño fijo
+img_pequena = cv2.resize(img, (300, 200))
+
+# También puedes escalar proporcionalmente
+img_grande = cv2.resize(img_pequena, None, fx=2, fy=2,interpolation=cv2.INTER_AREA)
+"""cv2.resize(): cambia el tamaño de la imagen.
+
+img: imagen original.
+
+None: no se especifican dimensiones exactas (usará los factores de escala).
+
+fx=1.5: multiplica el ancho por 1.5 (50 % más ancho).
+
+fy=1.5: multiplica el alto por 1.5 (50 % más alto).
+
+Resultado: img_grande es la misma imagen, pero 1.5 veces más grande en ambas dimensiones."""
+
+
+# Mostrar las tres imágenes
+cv2.imshow('Original', img)
+cv2.imshow('Más pequeña', img_pequena)
+cv2.imshow('Más grande', img_grande)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
