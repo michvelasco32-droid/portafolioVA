@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visión Artificial con Python</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        /* Portada */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+        }
+
+        .hero-info {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            opacity: 0.95;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-course {
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            opacity: 0.85;
+        }
+
+        /* Catálogo */
+        .catalog {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .catalog-title {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 1.5rem;
+            }
+
+            .catalog {
+                padding: 3rem 1.5rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Portada -->
+    <section class="hero">
+        <h1>Visión Artificial con Python</h1>
+        <p class="hero-info">Realizado por: VALERIA MICHELL VELASCO MAZA</p>
+        <p class="hero-course">3A de Inteligencia Artificial</p>
+    </section>
+
+    <!-- Catálogo -->
+    <section class="catalog">
+        <h2 class="catalog-title">Temas del Proyecto</h2>
+        <div class="cards-grid">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-image">📂</div>
+                <div class="card-content">
+                    <span class="card-number">01</span>
+                    <h3 class="card-title">1. Abrir Imagen con Python</h3>
+                    <a href="abrir imagen.html">link de prueba</a>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-image">⚫</div>
+                <div class="card-content">
+                    <span class="card-number">02</span>
+                    <h3 class="card-title">2. Escala de Grises</h3>
+                    <a href="escala de grises.html">link de prueba</a>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-image">ℹ️</div>
+                <div class="card-content">
+                    <span class="card-number">03</span>
+                    <h3 class="card-title">3. Información de Imagen</h3>
+                    <a href="infoimagen.html">link de prueba</a>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card">
+                <div class="card-image">📏</div>
+                <div class="card-content">
+                    <span class="card-number">04</span>
+                    <h3 class="card-title">4. Ajustar Tamaño</h3>
+                    <a href="ajustarimagen.html">link de prueba</a>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card">
+                <div class="card-image">📈</div>
+                <div class="card-content">
+                    <span class="card-number">05</span>
+                    <h3 class="card-title">5. Coordenadas</h3>
+                    <a href="Recorte.html">link de prueba</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image"> 🤑​🔄​</div>
+                <div class="card-content">
+                    <span class="card-number">06</span>
+                    <h3 class="card-title">6.rotaciondeimagen</h3>
+                    <a href="movimientosdeimagen.html">link de prueba</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🖼️ </div>
+                <div class="card-content">
+                    <span class="card-number">07</span>
+                    <h3 class="card-title">7.procesamiento_imagen.html</h3>
+                    <a href="movimientosdeimagen.html">link de prueba</a>
+                </div>
+            </div>
+
+             <div class="card">
+                <div class="card-image">🫰🏻 </div>
+                <div class="card-content">
+                    <span class="card-number">08</span>
+                    <h3 class="card-title">8.zoom_imagen.html</h3>
+                    <a href="movimientosdeimagen.html">link de prueba</a>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
