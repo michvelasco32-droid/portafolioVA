@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesamiento de Imágenes - Python</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #2d3748;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #764ba2;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .keyword {
+            color: #c586c0;
+        }
+
+        .function {
+            color: #dcdcaa;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .description {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+
+        .description h3 {
+            color: #764ba2;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid #667eea;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                font-size: 0.85rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ Procesamiento de Imágenes con Python</h1>
+            <p>Sistema Interactivo de Manipulación de Imágenes</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">📋 Código Completo</h2>
+            
+            <div class="code-block">
+<span class="keyword">from</span> cordenadas <span class="keyword">import</span> port
+<span class="keyword">from</span> zoom_img <span class="keyword">import</span> ampliar
+<span class="keyword">from</span> movimiento <span class="keyword">import</span> mover
+
+
+<span class="keyword">while</span> <span class="keyword">True</span>:
+        oppcion=<span class="function">int</span>(<span class="function">input</span>(<span class="string">"procesamiento de imagenes \n 1.recortar"</span>
+                          <span class="string">" \n 2. girar \n 3.zoom \n"</span>
+                          <span class="string">"selecciona una opcion"</span>))
+        <span class="keyword">if</span> oppcion==<span class="number">1</span>:
+            <span class="function">print</span>(<span class="string">"ejecuta el archivo cordenadas"</span>)
+            <span class="function">port</span>()
+        <span class="keyword">elif</span> oppcion==<span class="number">2</span>:
+            <span class="function">print</span>(<span class="string">"ejecuta el archivo movimientos"</span>)
+            <span class="function">mover</span>()
+        <span class="keyword">elif</span> oppcion==<span class="number">3</span>:
+            <span class="function">print</span>(<span class="string">"ejecuta el archivo zoom"</span>)
+            <span class="function">ampliar</span>()
+        <span class="keyword">elif</span> oppcion==<span class="number">4</span>:
+            <span class="function">print</span>(<span class="string">"salir del programa"</span>)
+            <span class="keyword">break</span>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">🎯 ¿Qué hace este programa?</h2>
+            
+            <div class="description">
+                <p>Este programa es un <strong>sistema interactivo de procesamiento de imágenes</strong> que permite al usuario realizar diferentes operaciones sobre imágenes digitales mediante un menú de opciones.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4><span class="feature-icon">✂️</span> Recortar</h4>
+                    <p>Permite seleccionar y recortar áreas específicas de una imagen usando coordenadas.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="feature-icon">🔄</span> Girar</h4>
+                    <p>Rota la imagen en diferentes ángulos para cambiar su orientación.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="feature-icon">🔍</span> Zoom</h4>
+                    <p>Amplía o reduce el tamaño de la imagen manteniendo su calidad.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">🔍 Explicación Detallada</h2>
+
+            <h3 style="color: #764ba2; margin-top: 1.5rem;">1️⃣ Importación de Módulos</h3>
+            <div class="code-block">
+<span class="keyword">from</span> cordenadas <span class="keyword">import</span> port
+<span class="keyword">from</span> zoom_img <span class="keyword">import</span> ampliar
+<span class="keyword">from</span> movimiento <span class="keyword">import</span> mover
+            </div>
+            <p style="margin: 1rem 0;">El programa importa tres funciones desde módulos externos:</p>
+            <ul style="margin-left: 2rem;">
+                <li><strong>port()</strong> - Función para recortar imágenes por coordenadas</li>
+                <li><strong>ampliar()</strong> - Función para hacer zoom en las imágenes</li>
+                <li><strong>mover()</strong> - Función para girar/rotar las imágenes</li>
+            </ul>
+
+            <h3 style="color: #764ba2; margin-top: 2rem;">2️⃣ Bucle Principal</h3>
+            <div class="code-block">
+<span class="keyword">while</span> <span class="keyword">True</span>:
+            </div>
+            <div class="description">
+                <h3>Bucle Infinito</h3>
+                <p>El programa ejecuta un bucle infinito que mantiene el menú activo hasta que el usuario decida salir. Esto permite realizar múltiples operaciones sin reiniciar el programa.</p>
+            </div>
+
+            <h3 style="color: #764ba2; margin-top: 2rem;">3️⃣ Menú Interactivo</h3>
+            <div class="code-block">
+oppcion=<span class="function">int</span>(<span class="function">input</span>(<span class="string">"procesamiento de imagenes \n 1.recortar"</span>
+                  <span class="string">" \n 2. girar \n 3.zoom \n"</span>
+                  <span class="string">"selecciona una opcion"</span>))
+            </div>
+            <p style="margin: 1rem 0;">El programa muestra un menú con las opciones disponibles y solicita al usuario que ingrese un número.</p>
+
+            <h3 style="color: #764ba2; margin-top: 2rem;">4️⃣ Estructura de Control</h3>
+            
+            <div class="highlight-box">
+                <strong>Condicional if-elif-break:</strong> El programa evalúa la opción seleccionada y ejecuta la función correspondiente.
+            </div>
+
+            <ul class="step-list">
+                <li>
+                    <strong>Opción 1 - Recortar:</strong> Ejecuta la función <code>port()</code> del módulo cordenadas para recortar la imagen según coordenadas específicas.
+                </li>
+                <li>
+                    <strong>Opción 2 - Girar:</strong> Ejecuta la función <code>mover()</code> del módulo movimiento para rotar la imagen.
+                </li>
+                <li>
+                    <strong>Opción 3 - Zoom:</strong> Ejecuta la función <code>ampliar()</code> del módulo zoom_img para ampliar o reducir la imagen.
+                </li>
+                <li>
+                    <strong>Opción 4 - Salir:</strong> Utiliza la instrucción <code>break</code> para terminar el bucle y finalizar el programa.
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">💡 Características Técnicas</h2>
+            
+            <div class="description">
+                <h3>🏗️ Arquitectura Modular</h3>
+                <p>El código utiliza una arquitectura modular que separa las funcionalidades en diferentes archivos, lo que facilita el mantenimiento y la escalabilidad del proyecto.</p>
+            </div>
+
+            <div class="description">
+                <h3>🔄 Interactividad</h3>
+                <p>El programa permite al usuario interactuar mediante entradas de teclado, proporcionando una experiencia de usuario amigable y sencilla.</p>
+            </div>
+
+            <div class="description">
+                <h3>⚙️ Flujo de Control</h3>
+                <p>Utiliza estructuras de control condicionales (if-elif) para dirigir el flujo del programa según las decisiones del usuario.</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">📚 Conceptos Aplicados</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>📦 Módulos</h4>
+                    <p>Organización del código en archivos separados reutilizables</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔁 Bucles</h4>
+                    <p>Repetición de instrucciones mediante while True</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎛️ Condicionales</h4>
+                    <p>Toma de decisiones con if-elif-break</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⌨️ Entrada de Datos</h4>
+                    <p>Captura de información del usuario con input()</p>
+                          </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
