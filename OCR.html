@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR con Python - Tesseract</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: linear-gradient(135deg, #f5f7fa 0%, #fce4ec 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #ec407a 0%, #d81b60 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(236, 64, 122, 0.3);
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 800px;
+        }
+
+        .subtitle {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Secciones */
+        .section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #ec407a;
+        }
+
+        .section h2 {
+            color: #ec407a;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h3 {
+            color: #d81b60;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+            color: #4a5568;
+        }
+
+        /* Lista de ejemplos */
+        .examples-list {
+            background: #fce4ec;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .examples-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .examples-list li {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .examples-list li::before {
+            content: "✓";
+            background: #ec407a;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Código */
+        .code-section {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-section::before {
+            content: "Python";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ec407a;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 5px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .code-section pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .comment {
+            color: #68d391;
+            font-style: italic;
+        }
+
+        .keyword {
+            color: #fc8181;
+        }
+
+        .string {
+            color: #f6e05e;
+        }
+
+        .function {
+            color: #63b3ed;
+        }
+
+        /* Pasos */
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            background: #fff5f7;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #ec407a;
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 4rem;
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ec407a;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step h4 {
+            color: #d81b60;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, #ec407a15 0%, #d81b6015 100%);
+            border: 2px solid #ec407a;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight strong {
+            color: #d81b60;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 2rem 1.5rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .code-section {
+                padding: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .step {
+                padding-left: 3rem;
+            }
+
+            .step::before {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #718096;
+            margin-top: 3rem;
+        }
+
+        .author-tag {
+            background: white;
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+        }
+
+        .author-tag strong {
+            color: #ec407a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🔍 OCR con Python y Tesseract</h1>
+            <p>Optical Character Recognition - Reconocimiento Óptico de Caracteres</p>
+            <div class="subtitle">
+                Convierte imágenes con texto en datos digitales copiables y editables
+            </div>
+        </header>
+
+        <!-- ¿Qué es OCR? -->
+        <section class="section">
+            <h2>📖 ¿Qué es OCR?</h2>
+            <p><strong>OCR (Optical Character Recognition)</strong> o <strong>Reconocimiento Óptico de Caracteres</strong> es una tecnología que reconoce las formas de las letras en imágenes y las convierte en texto digital copiable.</p>
+            
+            <h3>Aplicaciones Comunes:</h3>
+            <div class="examples-list">
+                <ul>
+                    <li>Fotos de documentos físicos</li>
+                    <li>Documentos escaneados</li>
+                    <li>Recibos y facturas</li>
+                    <li>Señales con letras (fotos bien enfocadas)</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <strong>¿Qué hace?</strong> Reconoce las formas de las letras y las convierte en texto digital que puedes copiar, editar y procesar.
+            </div>
+        </section>
+
+        <!-- Código Completo -->
+        <section class="section">
+            <h2>💻 Código Completo</h2>
+            
+            <div class="code-section">
+                <pre><span class="keyword">import</span> cv2  <span class="comment"># Importa OpenCV para manipular imágenes</span>
+<span class="keyword">import</span> pytesseract  <span class="comment"># Librería OCR</span>
+
+<span class="comment"># Configurar ruta de Tesseract</span>
+pytesseract.pytesseract.tesseract_cmd = <span class="string">r"C:\Users\MATUTINO\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"</span>
+
+<span class="comment"># Cargar imagen</span>
+imgtexto = cv2.<span class="function">imread</span>(<span class="string">"descarga.jfif"</span>)
+
+<span class="comment"># Redimensionar el tamaño de imagen</span>
+imgfinal = cv2.<span class="function">resize</span>(imgtexto, (<span class="string">800</span>, <span class="string">400</span>))
+
+<span class="comment"># Convertir a escala de grises</span>
+img_gris = cv2.<span class="function">cvtColor</span>(imgfinal, cv2.COLOR_BGR2GRAY)
+
+<span class="comment"># Separar el fondo del texto (binarización)</span>
+img_res = cv2.<span class="function">threshold</span>(img_gris, <span class="string">120</span>, <span class="string">255</span>, cv2.THRESH_BINARY)[<span class="string">1</span>]
+<span class="comment"># Devuelve 2 valores: los píxeles y la imagen procesada</span>
+
+<span class="comment"># Configurar OCR</span>
+texto = pytesseract.<span class="function">image_to_string</span>(img_res, lang=<span class="string">"spa"</span>)
+
+<span class="comment"># Imprimir el resultado</span>
+<span class="function">print</span>(<span class="string">"Texto detectado:"</span>)
+<span class="function">print</span>(texto)
+
+<span class="comment"># Mostrar imagen</span>
+cv2.<span class="function">imshow</span>(<span class="string">"texto"</span>, imgfinal)
+cv2.<span class="function">waitKey</span>(<span class="string">0</span>)
+cv2.<span class="function">destroyAllWindows</span>()</pre>
+            </div>
+        </section>
+
+        <!-- Explicación Paso a Paso -->
+        <section class="section">
+            <h2>🎯 Explicación Paso a Paso</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <h4>Importar Librerías</h4>
+                    <p><strong>cv2 (OpenCV):</strong> Biblioteca para procesamiento de imágenes</p>
+                    <p><strong>pytesseract:</strong> Librería para reconocimiento óptico de caracteres</p>
+                </div>
+
+                <div class="step">
+                    <h4>Configurar Tesseract</h4>
+                    <p>Se especifica la ruta donde está instalado Tesseract-OCR en el sistema. Esta ruta puede variar según tu instalación.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Cargar la Imagen</h4>
+                    <p>Se carga la imagen que contiene el texto usando <code>cv2.imread()</code>. En este caso, el archivo se llama "descarga.jfif".</p>
+                </div>
+
+                <div class="step">
+                    <h4>Redimensionar la Imagen</h4>
+                    <p>Se ajusta el tamaño de la imagen a 800x400 píxeles para facilitar el procesamiento y mejorar la precisión del OCR.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Convertir a Escala de Grises</h4>
+                    <p>Se transforma la imagen a escala de grises usando <code>cvtColor()</code>. Esto simplifica el procesamiento al eliminar la información de color.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Binarización (Threshold)</h4>
+                    <p>Se separa el fondo del texto aplicando un umbral de 120. Los píxeles más oscuros que 120 se convierten en negro (0) y los más claros en blanco (255). Esto mejora el contraste para el OCR.</p>
+                    <p><em>Nota: La función devuelve 2 valores, pero solo usamos el segundo [1] que es la imagen procesada.</em></p>
+                </div>
+
+                <div class="step">
+                    <h4>Aplicar OCR</h4>
+                    <p>Se usa <code>pytesseract.image_to_string()</code> para extraer el texto de la imagen procesada. El parámetro
