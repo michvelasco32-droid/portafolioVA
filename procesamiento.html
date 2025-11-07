@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesamiento de Texto NLP - Explicación del Código</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 50%, #c71585 100%);
+            min-height: 100vh;
+            padding-bottom: 3rem;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(255, 20, 147, 0.4);
+            margin-bottom: 3rem;
+        }
+
+        .header .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            color: #ff1493;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(255, 20, 147, 0.2);
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 1.4rem;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff1493;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(255, 20, 147, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #ff1493;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 4px solid #ff1493;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
+        }
+
+        .intro-box h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-box p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 2rem;
+            border-radius: 15px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 3px solid #ff1493;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-block code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            display: block;
+        }
+
+        .code-line {
+            display: block;
+            padding: 0.2rem 0;
+        }
+
+        .keyword { color: #c586c0; font-weight: bold; }
+        .function { color: #dcdcaa; }
+        .string { color: #ce9178; }
+        .number { color: #b5cea8; }
+        .comment { color: #6a9955; font-style: italic; }
+        .operator { color: #d4d4d4; }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 6px 25px rgba(255, 20, 147, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transition: all 0.5s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(255, 20, 147, 0.4);
+        }
+
+        .module-card:hover::before {
+            top: -25%;
+            right: -25%;
+        }
+
+        .module-card .icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .module-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .module-card .function-name {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .module-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .menu-showcase {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            border: 3px solid #ff1493;
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.15);
+        }
+
+        .menu-showcase h3 {
+            color: #ff1493;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .menu-options {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            background: linear-gradient(135deg, #fff5fb 0%, #ffe6f2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 6px solid #ff1493;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 20, 147, 0.1);
+        }
+
+        .menu-item:hover {
+            transform: translateX(15px);
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.2);
+        }
+
+        .menu-number {
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
+        }
+
+        .menu-content h4 {
+            color: #ff1493;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-content p {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .flow-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            border: 3px solid #ff1493;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #fff5fb 0%, #ffe6f2 100%);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 15px;
+            border-left: 6px solid #ff1493;
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: "↓";
+            position: absolute;
+            left: 50%;
+            bottom: -35px;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            color: #ff1493;
+            font-weight: bold;
+        }
+
+        .flow-step:last-child::after {
+            content: "";
+        }
+
+        .step-number {
+            background: #ff1493;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .flow-step h4 {
+            color: #ff1493;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .flow-step p {
+            margin-top: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #fff5fb 0%, #ffe6f2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border-top: 5px solid #ff1493;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .concept-card h4 {
+            color: #ff1493;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .concept-card code {
+            background: #ff1493;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .concept-card p {
+            margin-top: 0.8rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ff1493 0%, #c71585 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            box-shadow: 0 8px 30px rgba(255, 20, 147, 0.4);
+        }
+
+        .highlight-box h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-box ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .highlight-box li {
+            padding: 0.7rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+            font-size: 1.1rem;
+        }
+
+        .highlight-box li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .nlp-info {
+            background: #fff5fb;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            border-left: 6px solid #ff1493;
+        }
+
+        .nlp-info h3 {
+            color: #ff1493;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nlp-info p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .nlp-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .nlp-feature {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #ff69b4;
+            box-shadow: 0 3px 10px rgba(255, 20, 147, 0.1);
+        }
+
+        .nlp-feature h4 {
+            color: #ff1493;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-handling {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe6ee 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid #ff69b4;
+        }
+
+        .error-handling h4 {
+            color: #ff1493;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-handling code {
+            background: #ff1493;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .footer-box {
+            background: linear-gradient(135deg, #c71585 0%, #ff1493 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 3rem;
+            box-shadow: 0 10px 35px rgba(255, 20, 147, 0.5);
+        }
+
+        .footer-box h3 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-box p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .modules-grid,
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="icon">🌐</div>
+        <h1>Procesamiento de Texto NLP</h1>
+        <p class="subtitle">Sistema de Traducción y Análisis de Lenguaje Natural</p>
+        <span class="badge">Natural Language Processing</span>
+    </div>
+
+    <div class="container">
+        <div class="main-card">
+            <div class="intro-box">
+                <h2>🎯 ¿Qué hace este programa?</h2>
+                <p>Este es un sistema completo de <strong>Procesamiento de Lenguaje Natural (NLP)</strong> que integra múltiples herramientas de traducción y análisis de texto. El programa presenta un menú interactivo donde el usuario puede seleccionar entre 5 diferentes funcionalidades de procesamiento de texto, cada una especializada en una tarea específica de NLP.</p>
+            </div>
+
+            <h2 class="section-title">📦 Módulos Importados</h2>
+
+            <div class="modules-grid">
+                <div class="module-card">
+                    <span class="icon">🌍</span>
+                    <h3>Tres Idiomas</h3>
+                    <p>Módulo especializado en traducción entre tres idiomas diferentes simultáneamente.</p>
+                    <div class="function-name">tresidiomasa()</div>
+                </div>
+
+                <div class="module-card">
+                    <span class="icon">📖</span>
+                    <h3>Práctica de Traductor</h3>
+                    <p>Herramienta para practicar y probar diferentes traducciones de manera interactiva.</p>
+                    <div class="function-name">traductors()</div>
+                </div>
+
+                <div class="module-card">
+                    <span class="icon">⇄</span>
+                    <h3>Traductor Bidireccional</h3>
+                    <p>Realiza traducciones en ambos sentidos entre dos idiomas seleccionados.</p>
+                    <div class="function-name">ambostraductor()</div>
+                </div>
+
+                <div class="module-card">
+                    <span class="icon">🔧</span>
+                    <h3>Preprocesamiento</h3>
+                    <p>Limpia y prepara texto para análisis: tokenización, lematización, eliminación de stopwords.</p>
+                    <div class="function-name">prepros()</div>
+                </div>
+
+                <div class="module-card">
+                    <span class="icon">📝</span>
+                    <h3>TextBlob</h3>
+                    <p>Utiliza la librería TextBlob para análisis de sentimientos y procesamiento avanzado de texto.</p>
+                    <div class="function-name">textbloob()</div>
+                </div>
+            </div>
+
+            <h2 class="section-title">💻 Código Completo</h2>
+
+            <div class="code-block">
+                <code>
+<span class="code-line"><span class="comment"># Importar funciones desde módulos de NLP</span></span>
+<span class="code-line"><span class="keyword">from</span> tresidiomas <span class="keyword">import</span> tresidiomasa</span>
+<span class="code-line"><span class="keyword">from</span> practicadetraductor <span class="keyword">import</span> traductors</span>
+<span class="code-line"><span class="keyword">from</span> traductordeambos <span class="keyword">import</span> ambostraductor</span>
+<span class="code-line"><span class="keyword">from</span> preprocesamiento <span class="keyword">import</span> prepros</span>
+<span class="code-line"><span class="keyword">from</span> libreriatextbloob <span class="keyword">import</span> textbloob</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">while</span> <span class="keyword">True</span>:</span>
+<span class="code-line">    <span class="comment"># Mostrar menú de procesamiento de texto</span></span>
+<span class="code-line">    <span class="function">print</span>(<span class="string">"=== Procesamiento de Texto ==="</span>)</span>
+<span class="code-line">    <span class="function">print</span>(<span class="string">"1. Traductor de Tres Idiomas"</span>)</span>
+<span class="code-line">    <span class="function">print</span>(<span class="string">"2. Práctica de Traductor"</span>)</span>
+<span class="code-line">    <span class="function">print</span>(<span class="string">"3. Traductor de Ambos"</span>)</span>
+<span class="code-line">    <span class="function">print</span>(<span class="string">"4. Preprocesamiento"</span>)</span>
+<span class="code-line">    <span class="function">print</span>(<span class="string">"5. Librería TextBlob"</span>)</span>
+<span class="code-line">    <span class="function">print</span>(<span class="string">"6. Salir"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line">    op = <span class="function">input</span>(<span class="string">"Selecciona una opción: "</span>)</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="keyword">if</span> op == <span class="string">'1'</span>:</span>
+<span class="code-line">        <span class="function">print</span>(<span class="string">"Ejecutando traductor de tres idiomas..."</span>)</span>
+<span class="code-line">        <span class="function">tresidiomasa</span>()</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="keyword">elif</span> op == <span class="string">'2'</span>:</span>
+<span class="code-line">        <span class="function">print</span>(<span class="string">"Ejecutando práctica de traductor..."</span>)</span>
+<span class="code-line">        <span class="function">traductors</span>()</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="keyword">elif</span> op == <span class="string">'3'</span>:</span>
+<span class="code-line">        <span class="function">print</span>(<span class="string">"Ejecutando traductor bidireccional..."</span>)</span>
+<span class="code-line">        <span class="function">ambostraductor</span>()</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="keyword">elif</span> op == <span class="string">'4'</span>:</span>
+<span class="code-line">        <span class="function">print</span>(<span class="string">"Ejecutando preprocesamiento de texto..."</span>)</span>
+<span class="code-line">        <span class="function">prepros</span>()</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="keyword">elif</span> op == <span class="string">'5'</span>:</span>
+<span class="code-line">        <span class="function">print</span>(<span class="string">"Ejecutando TextBlob..."</span>)</span>
+<span class="code-line">        <span class="function">textbloob</span>()</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="keyword">elif</span> op == <span class="string">'6'</span>:</span>
+<span class="code-line">        <span class="function">print</span>(<span class="string">"Saliendo del programa..."</span>)</span>
+<span class="code-line">        <span class="keyword">break</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="keyword">else</span>:</span>
+<span class="code-line">        <span class="function">print</span>(<span class="string">"❌ Opción no válida. Intenta de nuevo."</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="comment"># Punto de entrada del programa</span></span>
+<span class="code-line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span>
+<span class="code-line">    <span class="function">todoln</span>()</span>
+<span class="code-line">    cv2.<span class="function">destroyAllWindows</span>()</span>
+                </code>
+            </div>
+
+            <h2 class="section-title">🎯 Menú de Opciones</h2>
+
+            <div class="menu-showcase">
+                <h3>Sistema Interactivo de Procesamiento de Texto</h3>
+                <div class="menu-options">
+                    <div class="menu-item">
+                        <div class="menu-number">1</div>
+                        <div class="menu-content">
+                            <h4>Traductor de Tres Idiomas</h4>
+                            <p>Traduce texto simultáneamente entre tres idiomas diferentes. Ideal para comparar traducciones y aprender vocabulario en múltiples lenguas.</p>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-number">2</div>
+                        <div class="menu-content">
+                            <h4>Práctica de Traductor</h4>
+                            <p>Herramienta interactiva para practicar traducciones. Permite experimentar con diferentes frases y ver los resultados en tiempo real.</p>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-number">3</div>
+                        <div class="menu-content">
+                            <h4>Traductor Bidireccional</h4>
+                            <p>Realiza traducciones en ambas direcciones entre dos idiomas. Perfecto para conversaciones bilingües y verificación de traducciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-number">4</div>
+                        <div class="menu-content">
+                            <h4>Preprocesamiento de Texto</h4>
+                            <p>Limpia y prepara texto para análisis: elimina stopwords, aplica lematización, tokenización y normalización de datos textuales.</p>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-number">5</div>
+                        <div class="menu-content">
+                            <h4>Librería TextBlob</h4>
+                            <p>Utiliza TextBlob para análisis de sentimientos, extracción de sustantivos, corrección ortográfica y procesamiento avanzado de texto.</p>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-number">6</div>
+                        <div class="menu-content">
+                            <h4>Salir del Programa</h4>
+                            <p>Termina la ejecución del programa de forma segura, cerrando todas las ventanas y liberando recursos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">🔄 Flujo de Ejecución</h2>
+
+            <div class="flow-container">
+                <div class="flow-step">
+                    <span class="step-number">1</span>
+                    <h4>Importación de Módulos</h4>
+                    <p>El programa importa 5 funciones especializadas desde módulos externos, cada una dedicada a una tarea específica de NLP.</p>
+                </div>
+
+                <div class="flow-step">
+                    <span class="step-number">2</span>
+                    <h4>Inicio del Bucle</h4>
+                    <p>Se inicia un bucle infinito <code>while True</code> que mantiene el programa ejecutándose hasta que el usuario elija salir.</p>
+                </div>
+
+                <div class="flow-step">
+                    <span class="step-number">3</span>
+                    <h4>Mostrar Menú</h4>
+                    <p>Se imprime un menú formateado con 6 opciones disponibles usando múltiples instrucciones <code>print()</code>.</p>
+                </div>
+
+                <div class="flow-step">
+                    <span class="step-number">4</span>
+                    <h4>Capturar Opción</h4>
+                    <p>El programa espera que el usuario ingrese una opción del 1 al 6 usando <code>input()</code>. La entrada se guarda como string.</p>
+                </div>
+
+                <div class="flow-step">
+                    <span class="step-number">5</span>
+                    <h4>Evaluar Selección</h4>
+                    <p>Se evalúa la opción usando una cadena de <code>if-elif-else</code> comparando strings ('1', '2', '3', etc.).</p>
+                </div>
+
+                <div class="flow-step">
+                    <span class="step-number">6</span>
+                    <h4>Ejecutar Función</h4>
+                    <p>Según la opción seleccionada, se imprime un mensaje descriptivo y se ejecuta la función correspondiente del módulo importado.</p>
+                </div>
+
+                <div class="flow-step">
+                    <span class="step-number">7</span>
+                    <h4>Repetir o Salir</h4>
+                    <p>Si la opción fue 1-5, vuelve al paso 3. Si fue 6, ejecuta <code>break</code> y termina el bucle. Si fue inválida, muestra error y repite.</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">🧠 ¿Qué es NLP?</h2>
+
+            <div class="nlp-info
