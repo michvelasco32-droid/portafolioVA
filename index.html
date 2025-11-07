@@ -14,8 +14,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
+            color: #e0e0e0;
+            background: #0a0a0a;
         }
 
         /* Portada */
@@ -25,10 +25,28 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a0033 0%, #4a0e4e 50%, #000000 100%);
             color: white;
             text-align: center;
             padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         .hero h1 {
@@ -36,17 +54,24 @@
             font-weight: 700;
             margin-bottom: 2rem;
             letter-spacing: -2px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
         }
 
         .hero-info {
             font-size: clamp(1rem, 2vw, 1.2rem);
             opacity: 0.95;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-course {
             font-size: clamp(0.9rem, 1.5vw, 1rem);
             opacity: 0.85;
+            position: relative;
+            z-index: 1;
         }
 
         /* Catálogo */
@@ -54,13 +79,15 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 2rem;
+            background: #0a0a0a;
         }
 
         .catalog-title {
             text-align: center;
             font-size: clamp(2rem, 4vw, 2.5rem);
             margin-bottom: 3rem;
-            color: #333;
+            color: #b794f6;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
         }
 
         .cards-grid {
@@ -70,27 +97,30 @@
         }
 
         .card {
-            background: white;
+            background: linear-gradient(145deg, #1a0033 0%, #2d1b4e 100%);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(138, 43, 226, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
+            border: 1px solid rgba(138, 43, 226, 0.3);
         }
 
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 24px rgba(138, 43, 226, 0.6);
+            border-color: rgba(138, 43, 226, 0.8);
         }
 
         .card-image {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a0e4e 0%, #6a1b9a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 4rem;
+            border-bottom: 2px solid rgba(138, 43, 226, 0.5);
         }
 
         .card-content {
@@ -100,18 +130,31 @@
         .card-title {
             font-size: 1.25rem;
             font-weight: 600;
-            color: #333;
+            color: #e0e0e0;
             margin-bottom: 0.5rem;
         }
 
         .card-number {
             display: inline-block;
-            background: #667eea;
+            background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.875rem;
             font-weight: 600;
+            box-shadow: 0 2px 4px rgba(138, 43, 226, 0.4);
+        }
+
+        .card-content a {
+            color: #b794f6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .card-content a:hover {
+            color: #d4b5ff;
+            text-decoration: underline;
         }
 
         /* Responsive */
@@ -145,7 +188,7 @@
         <div class="cards-grid">
             <!-- Card 1 -->
             <div class="card">
-                <div class="card-image">📂</div>
+                <div class="card-image">🖼️</div>
                 <div class="card-content">
                     <span class="card-number">01</span>
                     <h3 class="card-title">1. Abrir Imagen con Python</h3>
@@ -155,7 +198,7 @@
 
             <!-- Card 2 -->
             <div class="card">
-                <div class="card-image">⚫</div>
+                <div class="card-image">🎨</div>
                 <div class="card-content">
                     <span class="card-number">02</span>
                     <h3 class="card-title">2. Escala de Grises</h3>
@@ -165,7 +208,7 @@
 
             <!-- Card 3 -->
             <div class="card">
-                <div class="card-image">ℹ️</div>
+                <div class="card-image">📊</div>
                 <div class="card-content">
                     <span class="card-number">03</span>
                     <h3 class="card-title">3. Información de Imagen</h3>
@@ -175,7 +218,7 @@
 
             <!-- Card 4 -->
             <div class="card">
-                <div class="card-image">📏</div>
+                <div class="card-image">📐</div>
                 <div class="card-content">
                     <span class="card-number">04</span>
                     <h3 class="card-title">4. Ajustar Tamaño</h3>
@@ -185,7 +228,7 @@
 
             <!-- Card 5 -->
             <div class="card">
-                <div class="card-image">📈</div>
+                <div class="card-image">✂️</div>
                 <div class="card-content">
                     <span class="card-number">05</span>
                     <h3 class="card-title">5. Coordenadas</h3>
@@ -194,31 +237,36 @@
             </div>
 
             <div class="card">
-                <div class="card-image"> 🤑​🔄​</div>
+                <div class="card-image">🔄</div>
                 <div class="card-content">
                     <span class="card-number">06</span>
-                    <h3 class="card-title">6.rotaciondeimagen</h3>
-                    <a href="movimientosdeimagen.html">link de prueba</a>
+                    <h3 class="card-title">6. Rotacióndeimagenn</h3>
+                    <a href="rotaciondeimagenn.html">link de prueba</a>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-image">🖼️ </div>
+
+           <div class="card">
+                <div class="card-image">🫡</div>
                 <div class="card-content">
                     <span class="card-number">07</span>
-                    <h3 class="card-title">7.procesamiento_imagen.html</h3>
+                    <h3 class="card-title">7.movimientosdeimagen</h3>
                     <a href="movimientosdeimagen.html">link de prueba</a>
                 </div>
             </div>
 
+
+
              <div class="card">
-                <div class="card-image">🫰🏻 </div>
+                <div class="card-image">😌</div>
                 <div class="card-content">
                     <span class="card-number">08</span>
-                    <h3 class="card-title">8.zoom_imagen.html</h3>
-                    <a href="zoom_imagen.html">link de prueba</a>
+                    <h3 class="card-title">8.zoom</h3>
+                    <a href="zoom.html">link de prueba</a>
                 </div>
             </div>
+
+
 
              <div class="card">
                 <div class="card-image">v​</div>
@@ -227,9 +275,11 @@
                     <h3 class="card-title">09.procesamiento</h3>
                     <a href="procesamiento.html">link de prueba</a>
                     </div>
-                </div
-                    
-           <div class="card">
+                </div>
+           
+
+
+            <div class="card">
                 <div class="card-image">📍​</div>
                 <div class="card-content">
                     <span class="card-number">10</span>
@@ -237,9 +287,7 @@
                     <a href="OCR.html">link de prueba</a>
                 </div>
             </div>
-            
-               </div>
-            </div>
+
         </div>
     </section>
 </body>
