@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reconocimiento de Placas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+        }
+
+        .description {
+            line-height: 1.8;
+            color: #333;
+            font-size: 1.05em;
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            margin: 15px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .list-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #764ba2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .flow-box {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .flow-box::after {
+            content: '↓';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            color: #667eea;
+        }
+
+        .flow-box:last-child::after {
+            content: '';
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .step-number {
+                display: block;
+                margin: 0 0 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚗 Sistema de Reconocimiento de Placas</h1>
+            <p>Control de Acceso Automático con OCR</p>
+        </header>
+
+        <div class="content">
+            <!-- Descripción General -->
+            <div class="section">
+                <h2>📋 Descripción General</h2>
+                <p class="description">
+                    Este sistema es un <span class="highlight">control de acceso automatizado para estacionamientos</span> que utiliza visión por computadora y reconocimiento óptico de caracteres (OCR). El programa analiza imágenes de placas vehiculares y determina si el vehículo tiene autorización para ingresar al estacionamiento del CBTIS 144.
+                </p>
+            </div>
+
+            <!-- Bibliotecas Utilizadas -->
+            <div class="section">
+                <h2>📚 Bibliotecas Utilizadas</h2>
+                
+                <div class="list-item">
+                    <h3>🔷 OpenCV (cv2)</h3>
+                    <p class="description">
+                        Biblioteca de visión por computadora que permite cargar, procesar y manipular imágenes. Se usa para operaciones como redimensionar, convertir a escala de grises y binarizar imágenes.
+                    </p>
+                </div>
+
+                <div class="list-item">
+                    <h3>🔷 Pytesseract</h3>
+                    <p class="description">
+                        Interfaz de Python para Tesseract OCR, que extrae texto de imágenes. En este caso, lee los caracteres de las placas vehiculares.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="section">
+                <h2>⚙️ Configuración Inicial</h2>
+                
+                <div class="code-block">
+pytesseract.pytesseract.tesseract_cmd = r"C:\Users\..."
+                </div>
+                
+                <p class="description">
+                    Define la ruta donde está instalado Tesseract OCR en el sistema. Esta configuración es necesaria para que Python pueda encontrar y ejecutar el motor de OCR.
+                </p>
+
+                <div class="warning">
+                    <strong>⚠️ Importante:</strong> Esta ruta debe ajustarse según la instalación específica de cada computadora.
+                </div>
+
+                <h3>Placas Autorizadas</h3>
+                <div class="code-block">
+PLACAS_AUTORIZADAS = ["XYZ789", "GOT456", "ADH123", "QWE789", "UOR420"]
+                </div>
+                <p class="description">
+                    Lista de placas que tienen permiso de acceso al estacionamiento. El sistema comparará el texto detectado con esta lista.
+                </p>
+
+                <h3>Imágenes a Analizar</h3>
+                <div class="code-block">
+IMAGENES_PLACAS = ("placas.jpg", "placa.png")
+                </div>
+                <p class="description">
+                    Tupla con los nombres de los archivos de imagen que el sistema procesará.
+                </p>
+            </div>
+
+            <!-- Función Principal -->
+            <div class="section">
+                <h2>🔧 Función analizar_placa()</h2>
+                <p class="description">
+                    Esta es la función principal que realiza todo el proceso de análisis. Recibe como parámetro la ruta de una imagen y ejecuta los siguientes pasos:
+                </p>
+
+                <div class="flow-diagram">
+                    <div class="flow-box">
+                        <strong>1. Cargar Imagen</strong>
+                        <p>Se carga la imagen usando cv2.imread()</p>
+                    </div>
+                    
+                    <div class="flow-box">
+                        <strong>2. Redimensionar</strong>
+                        <p>Se ajusta a 800x300 píxeles para mejorar la lectura</p>
+                    </div>
+                    
+                    <div class="flow-box">
+                        <strong>3. Convertir a Escala de Grises</strong>
+                        <p>Elimina el color para facilitar el procesamiento</p>
+                    </div>
+                    
+                    <div class="flow-box">
+                        <strong>4. Binarización</strong>
+                        <p>Convierte la imagen a blanco y negro puro (umbral 120)</p>
+                    </div>
+                    
+                    <div class="flow-box">
+                        <strong>5. Aplicar OCR</strong>
+                        <p>Extrae el texto de la imagen procesada</p>
+                    </div>
+                    
+                    <div class="flow-box">
+                        <strong>6. Limpiar Texto</strong>
+                        <p>Elimina espacios, saltos de línea y guiones</p>
+                    </div>
+                    
+                    <div class="flow-box">
+                        <strong>7. Verificar Autorización</strong>
+                        <p>Compara con la lista de placas autorizadas</p>
+                    </div>
+                    
+                    <div class="flow-box">
+                        <strong>8. Mostrar Resultado</strong>
+                        <p>Muestra el acceso permitido o denegado</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Procesamiento de Imagen -->
+            <div class="section">
+                <h2>🖼️ Procesamiento de Imagen</h2>
+
+                <div class="step-card">
+                    <span class="step-number">1</span>
+                    <strong>Redimensionamiento</strong>
+                    <div class="code-block">placa_redimensionada = cv2.resize(placa, (800, 300))</div>
+                    <p class="description">
+                        Estandariza el tamaño de todas las imágenes para obtener resultados consistentes en el OCR.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">2</span>
+                    <strong>Conversión a Escala de Grises</strong>
+                    <div class="code-block">placa_gris = cv2.cvtColor(placa_redimensionada, cv2.COLOR_BGR2GRAY)</div>
+                    <p class="description">
+                        Reduce la complejidad de la imagen eliminando la información de color, dejando solo intensidad de luz.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">3</span>
+                    <strong>Binarización (Umbralización)</strong>
+                    <div class="code-block">_, placa_binaria = cv2.threshold(placa_gris, 120, 255, cv2.THRESH_BINARY)</div>
+                    <p class="description">
+                        Convierte la imagen en solo dos colores: blanco (255) o negro (0). Los píxeles con valor mayor a 120 se vuelven blancos, los demás negros. Esto mejora el contraste para el OCR.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Extracción de Texto -->
+            <div class="section">
+                <h2>📝 Extracción y Limpieza de Texto</h2>
+
+                <div class="step-card">
+                    <span class="step-number">1</span>
+                    <strong>Aplicar OCR</strong>
+                    <div class="code-block">texto_detectado = pytesseract.image_to_string(placa_binaria, lang="eng")</div>
+                    <p class="description">
+                        Tesseract analiza la imagen binarizada y extrae los caracteres que reconoce. El parámetro <span class="highlight">lang="eng"</span> indica que debe usar el idioma inglés.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">2</span>
+                    <strong>Limpiar el Texto</strong>
+                    <div class="code-block">texto_limpio = (
+    texto_detectado.strip()
+    .replace(" ", "")
+    .replace("\n", "")
+    .replace("-", "")
+    .upper()
+)</div>
+                    <p class="description">
+                        El texto extraído por OCR puede contener espacios, saltos de línea o caracteres extra. Este proceso:
+                    </p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>strip()</strong>: Elimina espacios al inicio y final</li>
+                        <li><strong>replace(" ", "")</strong>: Quita todos los espacios</li>
+                        <li><strong>replace("\n", "")</strong>: Elimina saltos de línea</li>
+                        <li><strong>replace("-", "")</strong>: Quita guiones</li>
+                        <li><strong>upper()</strong>: Convierte todo a mayúsculas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Verificación -->
+            <div class="section">
+                <h2>✅ Verificación de Acceso</h2>
+                
+                <div class="code-block">if texto_limpio in PLACAS_AUTORIZADAS:
+    print("ACCESO PERMITIDO: Bienvenido al estacionamiento del CBTIS 144")
+else:
+    print(" PLACA NO REGISTRADA")</div>
+
+                <p class="description">
+                    El sistema compara el texto limpio con la lista de placas autorizadas. Si hay coincidencia, permite el acceso; de lo contrario, lo deniega.
+                </p>
+
+                <div class="info">
+                    <strong>💡 Nota:</strong> La comparación es exacta. El texto detectado debe coincidir completamente con alguna placa de la lista.
+                </div>
+            </div>
+
+            <!-- Visualización -->
+            <div class="section">
+                <h2>👁️ Visualización de Resultados</h2>
+                
+                <div class="code-block">cv2.imshow(f"Placa analizada - {ruta_imagen}", placa_redimensionada)
+cv2.waitKey(0)
+cv2.destroyAllWindows()</div>
+
+                <p class="description">
+                    Muestra la imagen procesada en una ventana. El programa espera hasta que el usuario presione cualquier tecla (<span class="highlight">waitKey(0)</span>) y luego cierra todas las ventanas.
+                </p>
+            </div>
+
+            <!-- Bucle Principal -->
+            <div class="section">
+                <h2>🔄 Bucle de Procesamiento</h2>
+                
+                <div class="code-block">for imagen in IMAGENES_PLACAS:
+    analizar_placa(imagen)</div>
+
+                <p class="description">
+                    Recorre la tupla de imágenes y procesa cada una llamando a la función <span class="highlight">analizar_placa()</span>. Esto permite analizar múltiples placas de forma automática.
+                </p>
+            </div>
+
+            <!-- Aplicaciones -->
+            <div class="section">
+                <h2>🎯 Aplicaciones Prácticas</h2>
+                
+                <div class="list-item">
+                    <strong>🅿️ Control de Estacionamientos:</strong> Automatizar el acceso de vehículos autorizados
+                </div>
+                
+                <div class="list-item">
+                    <strong>🏢 Seguridad Empresarial:</strong> Registrar entradas y salidas de vehículos
+                </div>
+                
+                <div class="list-item">
+                    <strong>🚦 Monitoreo de Tráfico:</strong> Identificar vehículos para estadísticas o multas
+                </div>
+                
+                <div class="list-item">
+                    <strong>🏫 Instituciones Educativas:</strong> Control de acceso vehicular en campus
+                </div>
+            </div>
+
+            <!-- Mejoras Posibles -->
+            <div class="section">
+                <h2>🚀 Mejoras Posibles</h2>
+                
+                <div class="list-item">
+                    ✨ Integrar con cámaras en tiempo real para procesamiento continuo
+                </div>
+                
+                <div class="list-item">
+                    ✨ Agregar base de datos para registrar entradas/salidas con timestamp
+                </div>
+                
+                <div class="list-item">
+                    ✨ Implementar Machine Learning para mejorar la precisión del reconocimiento
+                </div>
+                
+                <div class="list-item">
+                    ✨ Añadir interfaz gráfica para facilitar el uso
+                </div>
+                
+                <div class="list-item">
+                    ✨ Incluir notificaciones automáticas (email, SMS) para accesos denegados
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
